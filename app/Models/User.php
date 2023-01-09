@@ -113,4 +113,14 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     {
         return [];
     }
+
+    public function columns()
+    {
+        return $this->hasMany(Column::class)->orderBy('order');
+    }
+
+    public function cards()
+    {
+        return $this->hasMany(Card::class);
+    }
 }
