@@ -42,6 +42,8 @@ class CardController extends Controller
         $card->description  = $request->input('description');
         $card->order        = $order;
         $card->save();
+
+        return $card;
     }
 
     public function update(Request $request)
@@ -50,10 +52,27 @@ class CardController extends Controller
         $card->name = $request->input('name');
         $card->description = $request->input('description');
         $card->save();
+
+        return $card;
     }
 
-    public function delete(Card $card)
+    public function sync(Request $request)
     {
-        $card->delete();
+        $this->validate(request(), [
+            'columns' => ['required', 'array']
+        ]);
+
+        foreach ($request->columns as $column) {
+            foreach ($column['cards'] as $i => $card) {
+                $order = $i + 1;
+                if ($card['column_id'] !== $column['id'] || $card['order'] !== $order) {
+                    request()->user()->cards()
+                        ->find($card['id'])
+                        ->update(['column_id' => $column['id'], 'order' => $order]);
+                }
+            }
+        }
+
+        return $request->user()->columns()->with('cards')->get();
     }
 }

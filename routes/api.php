@@ -47,13 +47,14 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
 });
 
-Route::get('index', [CardController::class, 'index'])->name('index');
-Route::post('columns', [ColumnController::class, 'store'])->name('columns.store');
-Route::post('cards', [CardController::class, 'store'])->name('cards.store');
-Route::put('update', [CardController::class, 'update'])->name('cards.update');
+Route::prefix('columns')->group(function () {
+Route::post('/', [ColumnController::class, 'store'])->name('columns.store');
+Route::delete('/{column}', [ColumnController::class, 'delete'])->name('columns.delete');
+});
 
 Route::prefix('cards')->group(function () {
+    Route::get('/', [CardController::class, 'index'])->name('index');
     Route::post('/', [CardController::class, 'store'])->name('cards.store');
     Route::put('/', [CardController::class, 'update'])->name('cards.update');
-    Route::delete('/{card}', [CardController::class, 'delete'])->name('cards.delete');
+    Route::put('/sync', [CardController::class, 'sync'])->name('cards.sync');
 });

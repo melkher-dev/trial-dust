@@ -25,5 +25,12 @@ class ColumnController extends Controller
         $column->name = $request->input('name');
         $column->order = $order;
         $column->save();
+
+        return $column->load('cards');
+    }
+
+    public function delete(Column $column)
+    {
+        $column->delete();
     }
 }

@@ -1,13 +1,12 @@
 <template>
   <div>
-    <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#columnModal">
+    <!-- <button type="button" class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#columnModal">
       Add column
     </button>
     <div class="container">
       <div class="row">
         <div class="">
           <div v-for="column in cards" :key="column.id">
-            <!-- {{ column }} -->
             <div class="card" style="width: 18rem">
               <div class="card-body">
                 <div>
@@ -48,10 +47,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Add column modal -->
-    <div id="columnModal" class="modal fade" tabindex="-1" aria-labelledby="columnModalLabel" aria-hidden="true">
+    <!-- <div id="columnModal" class="modal fade" tabindex="-1" aria-labelledby="columnModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -73,10 +72,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Add card modal -->
-    <div id="cardModal" class="modal fade" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+    <!-- <div id="cardModal" class="modal fade" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -99,10 +98,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Edit card modal -->
-    <div id="editCardModal" class="modal fade" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
+    <!-- <div id="editCardModal" class="modal fade" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -125,62 +124,66 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <KanbanBoard />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import KanbanBoard from '../components/KanbanBoard'
 export default {
+  components: { KanbanBoard },
   middleware: 'auth',
 
   metaInfo () {
     return { title: 'Home' }
-  },
+    // },
 
-  data () {
-    return {
-      cards: {},
-      columnName: null,
-      isModalVisible: false,
-      cardForm: {
-        columnId: null,
-        description: null,
-        name: null
-      },
-      updateCardForm: {
-        name: null,
-        description: null,
-        cardId: null
-      }
-    }
-  },
+    // data () {
+    //   return {
+    //     cards: {},
+    //     columnName: null,
+    //     isModalVisible: false,
+    //     cardForm: {
+    //       columnId: null,
+    //       description: null,
+    //       name: null
+    //     },
+    //     updateCardForm: {
+    //       name: null,
+    //       description: null,
+    //       cardId: null
+    //     }
+    //   }
+    // },
 
-  mounted () {
-    axios.get('/api/index').then(response => (this.cards = response.data))
-  },
+    // mounted () {
+    //   axios.get('/api/index').then(response => (this.cards = response.data))
+    // },
 
-  methods: {
-    addColumn () {
-      axios.post('/api/columns', { name: this.columnName })
-    },
-    showAddCardModal (column) {
-      this.cardForm.columnId = column.id
-    },
-    showEditCardModal (card) {
-      this.updateCardForm.cardId = card.id
-      this.updateCardForm.name = card.name
-      this.updateCardForm.description = card.description
-    },
-    addCard () {
-      axios.post('/api/cards', this.cardForm)
-    },
-    editCard () {
-      axios.put('/api/cards', this.updateCardForm)
-    },
-    deleteCard (id) {
-      axios.delete(`/api/cards/${id}`)
-    }
+  // methods: {
+  //   addColumn () {
+  //     axios.post('/api/columns', { name: this.columnName })
+  //   },
+  //   showAddCardModal (column) {
+  //     this.cardForm.columnId = column.id
+  //   },
+  //   showEditCardModal (card) {
+  //     this.updateCardForm.cardId = card.id
+  //     this.updateCardForm.name = card.name
+  //     this.updateCardForm.description = card.description
+  //   },
+  //   addCard () {
+  //     axios.post('/api/cards', this.cardForm)
+  //   },
+  //   editCard () {
+  //     axios.put('/api/cards', this.updateCardForm)
+  //   },
+  //   deleteCard (id) {
+  //     axios.delete(`/api/cards/${id}`)
+  //   }
+  // }
   }
 }
 </script>
