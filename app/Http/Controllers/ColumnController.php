@@ -8,18 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class ColumnController extends Controller
 {
-    public function addColumn(Request $request)
+    public function store(Request $request)
     {
         $user = Auth::user();
 
         $column = $user->columns()->orderByDesc('order')->select('order')->get()->last();
 
-        Column::insert([
-            'user_id' => $user->id,
-            'column' => $request->columnName,
-            'order' => ++$column->order,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $order = 1;
+
+        if (!empty($column)) {
+            $order = $column->order + 1;
+        };
+
+        $column = new Column();
+        $column->user_id = $user->id;
+        $column->name = $request->input('name');
+        $column->order = $order;
+        $column->save();
     }
 }

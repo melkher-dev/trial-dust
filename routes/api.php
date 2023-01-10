@@ -47,5 +47,6 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
 });
 
-Route::get('get-cards', [CardController::class, 'getCards'])->name('get-cards');
-Route::post('save-column', [ColumnController::class, 'addColumn'])->name('save-column');
+Route::get('index', [CardController::class, 'index'])->name('index');
+Route::post('columns', [ColumnController::class, 'store'])->name('columns.store');
+Route::post('cards', [CardController::class, 'store'])->name('cards.store');

@@ -10,12 +10,23 @@
             <!-- {{ column }} -->
             <div class="card" style="width: 18rem">
               <div class="card-body">
-                <h5 class="card-title">
-                  {{ column.column }}
-                </h5>
+                <div>
+                  <h5 class="card-title">
+                    {{ column.name }}
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn btn-primary m-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#cardModal"
+                    @click="showAddCardModal(column)"
+                  >
+                    Add card
+                  </button>
+                </div>
                 <div v-for="card in column.cards" :key="card.id">
                   <p class="card-text">
-                    {{ card.card }}
+                    {{ card.name }}
                   </p>
                 </div>
               </div>
@@ -31,7 +42,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 id="columnModalLabel" class="modal-title">
-              Add new title
+              Add new column
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
           </div>
@@ -44,6 +55,32 @@
             </button>
             <button type="button" class="btn btn-primary" @click="addColumn">
               Save column
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add card modal -->
+    <div id="cardModal" class="modal fade" tabindex="-1" aria-labelledby="cardModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="cardModalLabel" class="modal-title">
+              Add new card
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+          <div class="modal-body">
+            <input v-model="cardForm.name" class="form-control m-2" type="text" placeholder="Card name">
+            <input v-model="cardForm.description" class="form-control m-2" type="text" placeholder="Card description">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" @click="addCard">
+              Save card
             </button>
           </div>
         </div>
@@ -65,17 +102,31 @@ export default {
     return {
       cards: {},
       columnName: null,
-      isModalVisible: false
+      isModalVisible: false,
+      // cardName: null,
+      // cardDescription: null,
+      // columnId: null,
+      cardForm: {
+        columnId: null,
+        description: null,
+        name: null
+      }
     }
   },
 
   mounted () {
-    axios.get('/api/get-cards').then(response => (this.cards = response.data))
+    axios.get('/api/index').then(response => (this.cards = response.data))
   },
 
   methods: {
     addColumn () {
-      axios.post('/api/save-column', { columnName: this.columnName })
+      axios.post('/api/columns', { name: this.columnName })
+    },
+    showAddCardModal (column) {
+      this.cardForm.columnId = column.id
+    },
+    addCard () {
+      axios.post('/api/cards', this.cardForm)
     }
   }
 }
