@@ -25,9 +25,23 @@
                   </button>
                 </div>
                 <div v-for="card in column.cards" :key="card.id">
-                  <p class="card-text">
-                    {{ card.name }}
-                  </p>
+                  <div>
+                    <p class="card-text">
+                      {{ card.name }}
+                    </p>
+                    <button
+                      type="button"
+                      class="btn btn-primary m-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editCardModal"
+                      @click="showEditCardModal(card)"
+                    >
+                      Edit card
+                    </button>
+                    <button class="btn btn-danger" @click="deleteCard(card.id)">
+                      Delete card
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -86,6 +100,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Edit card modal -->
+    <div id="editCardModal" class="modal fade" tabindex="-1" aria-labelledby="editCardModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="editCardModalLabel" class="modal-title">
+              Add new card
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+          <div v-if="updateCardForm.cardId" class="modal-body">
+            <input v-model="updateCardForm.name" class="form-control m-2" type="text">
+            <input v-model="updateCardForm.description" class="form-control m-2" type="text">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" @click="editCard">
+              Edit card
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -103,13 +143,15 @@ export default {
       cards: {},
       columnName: null,
       isModalVisible: false,
-      // cardName: null,
-      // cardDescription: null,
-      // columnId: null,
       cardForm: {
         columnId: null,
         description: null,
         name: null
+      },
+      updateCardForm: {
+        name: null,
+        description: null,
+        cardId: null
       }
     }
   },
@@ -125,8 +167,19 @@ export default {
     showAddCardModal (column) {
       this.cardForm.columnId = column.id
     },
+    showEditCardModal (card) {
+      this.updateCardForm.cardId = card.id
+      this.updateCardForm.name = card.name
+      this.updateCardForm.description = card.description
+    },
     addCard () {
       axios.post('/api/cards', this.cardForm)
+    },
+    editCard () {
+      axios.put('/api/cards', this.updateCardForm)
+    },
+    deleteCard (id) {
+      axios.delete(`/api/cards/${id}`)
     }
   }
 }

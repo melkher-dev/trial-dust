@@ -43,4 +43,17 @@ class CardController extends Controller
         $card->order        = $order;
         $card->save();
     }
+
+    public function update(Request $request)
+    {
+        $card = Card::find($request->input('cardId'));
+        $card->name = $request->input('name');
+        $card->description = $request->input('description');
+        $card->save();
+    }
+
+    public function delete(Card $card)
+    {
+        $card->delete();
+    }
 }
