@@ -23,7 +23,7 @@ class CreateColumnsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('name');
+            $table->string('column');
             $table->integer('order')->default(0);
             $table->timestamps();
         });

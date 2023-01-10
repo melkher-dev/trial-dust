@@ -30,7 +30,7 @@ class CreateCardsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('name');
+            $table->string('card');
             $table->integer('order')->default(0);
 
             $table->timestamps();
